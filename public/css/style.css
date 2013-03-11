@@ -1,0 +1,19 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#console {
+    background-color: white;
+    border: solid 1px #999;
+    border-top-color: #ccc;
+    border-left-color: #ccc;
+    padding: 5px;
+    width: 100%;
+    height: 350px;
+    overflow-y: auto;
+}

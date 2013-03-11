@@ -1,0 +1,44 @@
+extends layout
+
+block content
+  h1= title
+  label Available Tools:
+    select#tools
+    input#args
+    button#run Run
+    button#abort Abort
+  pre#console
+    
+  script(src='/js/jquery-1.9.1.min.js', text='text/javascript')
+  script(src='/js/socket.io.min.js', text='text/javascript')
+  script(type='text/javascript')
+    ;(function($){
+      $(document).ready(function(e){
+        var tools = !{JSON.stringify(tools)}
+          , socket;
+        $.each(tools, function(k, v){
+          $('select#tools').append(
+            $('<option>').attr({value: k}).text(k)
+          );
+        });
+        $('select#tools').change(function(e){
+          var tool = tools[$(this).val()];
+          $('input#args').val(tool['default'] || '');
+        });
+        $('select#tools').trigger('change');
+        $('#run').click(function(e){
+          if(!socket){
+            socket = io.connect('http://portal.tomowang.c9.io/');
+            socket.on('msg', function(data){
+              $('#console').append(data);
+              $('#console').scrollTop($('#console').prop('scrollHeight'));
+            });
+            socket.on('exit', function(code){
+              $('#console').append('exit with code ' + code);
+            });
+          }
+          socket.emit('run', {'name': $('select#tools').val(), 'args': $('input#args').val()});
+        });
+      });
+    })(jQuery);
+  
