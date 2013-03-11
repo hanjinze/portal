@@ -64,12 +64,16 @@ app.map({
 io.sockets.on('connection', function(socket){
   socket.on('run', function(data){
     console.log(data);
-    var cmd = spawn(data.name, [data.agrs]);
-    cmd.stdout.on('data', function(){
-      socket.emit('msg', data);
+    var args = data.args ? data.args.split(/\s+/) : []
+      , cmd = spawn(data.name, args);
+    socket.on('abort', function(data){
+      cmd.kill();
     });
-    cmd.on('exit', function(code){
-      socket.emit('exit', code);
+    cmd.stdout.on('data', function(data){
+      socket.emit('msg', '' + data);
+    });
+    cmd.stderr.on('data', function(data){
+      socket.emit('error', '' + data);
     });
   });
 });

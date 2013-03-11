@@ -4,9 +4,9 @@ block content
   h1= title
   label Available Tools:
     select#tools
-    input#args
-    button#run Run
-    button#abort Abort
+  input#args
+  button#run Run
+  button#abort Abort
   pre#console
     
   script(src='/js/jquery-1.9.1.min.js', text='text/javascript')
@@ -35,9 +35,13 @@ block content
             });
             socket.on('exit', function(code){
               $('#console').append('exit with code ' + code);
+              $('#console').scrollTop($('#console').prop('scrollHeight'));
             });
           }
           socket.emit('run', {'name': $('select#tools').val(), 'args': $('input#args').val()});
+        });
+        $('#abort').click(function(e){
+          socket.emit('abort', {'name': $('select#tools').val()});
         });
       });
     })(jQuery);
