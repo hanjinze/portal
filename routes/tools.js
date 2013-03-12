@@ -27,7 +27,3 @@ exports.list = function(req, res){
 exports.get = function(req, res){
   res.send(tools[req.params.toolname]);
 };
-
-exports.run = function(req, res){
-  res.send('run: ' + req.params.toolname);
-};

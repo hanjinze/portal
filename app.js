@@ -54,8 +54,7 @@ app.map({
   '/tools': {
     get: tools.list,
     '/:toolname': {
-      get: tools.get,
-      post: tools.run
+      get: tools.get
     }
   }
 });
