@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -74,6 +73,9 @@ io.sockets.on('connection', function(socket){
     });
     cmd.stderr.on('data', function(data){
       socket.emit('error', '' + data);
+    });
+    cmd.on('exit', function(code){
+      socket.emit('exit', code);
     });
   });
 });
