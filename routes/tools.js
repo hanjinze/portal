@@ -5,16 +5,22 @@
 
 var tools = {
   'ping': {
-    'name': 'ping',
+    'description': 'ping address',
     'command': 'ping',
     'args': [],
     'default': '127.0.0.1'
   },
   'ls': {
-    'name': 'ls',
+    'description': 'list files',
     'command': 'ls',
     'args': [],
     'default': ''
+  },
+  'python': {
+    'description': 'python',
+    'command': 'python',
+    'args': [],
+    'default': '-V'
   }
 };
 

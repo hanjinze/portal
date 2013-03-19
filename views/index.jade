@@ -28,8 +28,12 @@ block content
         $('select#tools').trigger('change');
         $('#run').click(function(e){
           if(!socket){
-            socket = io.connect('http://portal.tomowang.c9.io/');
+            socket = io.connect('/');
             socket.on('msg', function(data){
+              $('#console').append(data);
+              $('#console').scrollTop($('#console').prop('scrollHeight'));
+            });
+            socket.on('error', function(data){
               $('#console').append(data);
               $('#console').scrollTop($('#console').prop('scrollHeight'));
             });

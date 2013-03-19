@@ -13,6 +13,8 @@ var app = express()
   , server = http.createServer(app)
   , io = require('socket.io').listen(server);
 
+io.set('log level', 2);  // using info log level
+
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
@@ -62,20 +64,22 @@ app.map({
 io.sockets.on('connection', function(socket){
   socket.on('run', function(data){
     console.log(data);
-    var args = data.args ? data.args.split(/\s+/) : []
-      , cmd = spawn(data.name, args);
-    socket.on('abort', function(data){
-      cmd.kill();
-    });
-    cmd.stdout.on('data', function(data){
-      socket.emit('msg', '' + data);
-    });
-    cmd.stderr.on('data', function(data){
-      socket.emit('error', '' + data);
-    });
-    cmd.on('exit', function(code){
-      socket.emit('exit', code);
-    });
+    var args = data.args ? data.args.split(/\s+/) : [];
+    if(tools.tools.hasOwnProperty(data.name)){
+        var cmd = spawn(tools.tools[data.name].command, args);
+        socket.on('abort', function(data){
+          cmd.kill();
+        });
+        cmd.stdout.on('data', function(data){
+          socket.emit('msg', '' + data);
+        });
+        cmd.stderr.on('data', function(data){
+          socket.emit('error', '' + data);
+        });
+        cmd.on('exit', function(code){
+          socket.emit('exit', code);
+        });
+    }
   });
 });
 
